@@ -35,7 +35,22 @@ npm install
 npm run dev
 ```
 
-Acesse `http://localhost:5173` (ou a porta indicada pelo Vite). O proxy de desenvolvimento configurado em `vite.config.ts` é necessário porque a API não envia cabeçalhos CORS, ver detalhes no guia técnico.
+Acesse `http://localhost:5173` (ou a porta indicada pelo Vite). O proxy de desenvolvimento
+configurado em `vite.config.ts` é necessário porque a API não envia cabeçalhos CORS, ver detalhes
+no guia técnico.
+
+### Produção
+
+```bash
+cd web
+npm run build
+npm run start
+```
+
+O comando `start` sobe um servidor Express (`server/index.ts`) que serve o build estático
+(`dist/`) **e** repassa `/api/*` para a API de login preservando o cookie de sessão — por isso
+funciona em produção, diferente do proxy de desenvolvimento do Vite. Detalhes em
+`docs/GUIA_TECNICO.md` seção 4.
 
 ## API utilizada
 
