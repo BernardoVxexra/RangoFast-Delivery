@@ -1,4 +1,4 @@
-// Tokens de identidade visual — mesmos valores usados no CSS do app Web.
+// Tokens de identidade visual, mesmos valores usados no CSS do app Web.
 // Ver docs/GUIA_TECNICO.md para a motivação ("manifesto de rota").
 export const colors = {
   paper: '#EEF1F3',

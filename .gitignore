@@ -3,3 +3,6 @@ ESTUDO_DEFESA.md
 
 # Specs de design geradas pelo skill de brainstorming — uso interno, não entram na entrega.
 docs/superpowers/
+
+# Workspace/ledger interno dos skills de execução de plano — scratch local.
+.superpowers/
