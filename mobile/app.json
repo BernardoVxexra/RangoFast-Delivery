@@ -25,7 +25,7 @@
       [
         "expo-camera",
         {
-          "cameraPermission": "O RangoFast Delivery usa a câmera para registrar o comprovante de entrega."
+          "cameraPermission": "O RangoFast Delivery usa a câmera para registrar o comprovante de entrega e ler o QR Code do pedido."
         }
       ],
       [
