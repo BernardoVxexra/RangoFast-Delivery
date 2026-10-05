@@ -17,7 +17,7 @@ function errorMessage(err: unknown): string {
 
 export function useOrder(code: string | undefined, user: AuthUser | null) {
   const [order, setOrder] = useState<Order | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() => !!code);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -27,6 +27,7 @@ export function useOrder(code: string | undefined, user: AuthUser | null) {
       setIsLoading(false);
       return;
     }
+    setIsLoading(true);
     try {
       setOrder(await getOrderByCode(code));
       setError(null);
@@ -40,8 +41,9 @@ export function useOrder(code: string | undefined, user: AuthUser | null) {
 
   useEffect(() => {
     if (!code) {
-      setOrder(null);
-      setIsLoading(false);
+      // Sem código ainda (ex.: CameraScreen aberta sem orderCode): nada para
+      // buscar. `order`/`isLoading` já começam em `null`/`false` nesse caso,
+      // então não há necessidade de setState aqui.
       return;
     }
     let active = true;
