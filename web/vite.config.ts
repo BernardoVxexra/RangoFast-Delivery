@@ -1,29 +1,47 @@
 import react from '@vitejs/plugin-react'
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
+import { forwardToAuthApi } from './server/authProxy.js'
 
-// A API do guia não envia cabeçalhos CORS, então o navegador bloqueia a
-// chamada direta. O proxy abaixo faz a requisição a partir do processo Node
-// do Vite (sem restrição de CORS) e repassa a resposta ao navegador como se
-// fosse a própria origem — solução válida apenas para desenvolvimento.
-export default defineConfig({
-  plugins: [react()],
-  server: {
-    proxy: {
-      '/api': {
-        target: 'https://login-p26w.onrender.com',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '/fatec/login/v1'),
-        cookieDomainRewrite: 'localhost',
-        // O backend rejeita (403) qualquer Origin que não reconheça.
-        // Como o proxy já contorna o CORS do navegador, repassamos a
-        // requisição sem esses headers, como um cliente não-browser faria.
-        configure: (proxy) => {
-          proxy.on('proxyReq', (proxyReq) => {
-            proxyReq.removeHeader('origin');
-            proxyReq.removeHeader('referer');
-          });
-        },
-      },
+// Substitui o proxy padrão do Vite (http-proxy-middleware) por um
+// middleware próprio que reusa a mesma função de produção
+// (server/authProxy.ts) — uma única implementação entende "remove
+// Origin/Referer, repassa Set-Cookie", em vez de duas que podem divergir.
+function authProxyPlugin(): Plugin {
+  return {
+    name: 'rangofast-auth-proxy',
+    configureServer(server) {
+      // server.middlewares é uma instância do connect: montar em '/api'
+      // já remove esse prefixo de req.url dentro do handler.
+      server.middlewares.use('/api', async (req, res) => {
+        const chunks: Buffer[] = [];
+        for await (const chunk of req) chunks.push(chunk as Buffer);
+        const body = Buffer.concat(chunks);
+
+        const headers = new Headers();
+        for (const [key, value] of Object.entries(req.headers) as [string, string | string[] | undefined][]) {
+          if (typeof value === 'string') headers.set(key, value);
+          else if (Array.isArray(value)) headers.set(key, value.join(', '));
+        }
+
+        const method = req.method ?? 'POST';
+        const hasBody = method !== 'GET' && method !== 'HEAD' && body.length > 0;
+
+        const request = new Request(`http://localhost${req.url}`, {
+          method,
+          headers,
+          body: hasBody ? body : undefined,
+        });
+
+        const response = await forwardToAuthApi(request, `/fatec/login/v1${req.url}`);
+
+        res.statusCode = response.status;
+        response.headers.forEach((value, key) => res.setHeader(key, value));
+        res.end(Buffer.from(await response.arrayBuffer()));
+      });
     },
-  },
+  };
+}
+
+export default defineConfig({
+  plugins: [react(), authProxyPlugin()],
 })
