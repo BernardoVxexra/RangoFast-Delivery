@@ -324,3 +324,35 @@ body {
   border-left: none;
   border-top: none;
 }
+
+.order-card {
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  background: var(--paper-raised);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.order-card__row {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.order-card__label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: #5b6166;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.order-card__value {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
