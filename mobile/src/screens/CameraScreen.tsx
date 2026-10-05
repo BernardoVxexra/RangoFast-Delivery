@@ -1,16 +1,39 @@
+import { useState } from 'react';
 import { View, Text, Image, StyleSheet } from 'react-native';
 import { CameraView } from 'expo-camera';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useCamera } from '../hooks/useCamera';
+import { useAuth } from '../hooks/useAuth';
+import { useOrder } from '../hooks/useOrder';
 import { Button } from '../components/Button';
 import { AppHeader } from '../components/AppHeader';
 import { RouteDivider } from '../components/RouteDivider';
+import { FeedbackModal } from '../components/FeedbackModal';
 import { colors, font, radius } from '../theme';
+import type { AppStackParamList } from '../routes/AppStack';
 
 export function CameraScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<AppStackParamList>>();
+  const route = useRoute<RouteProp<AppStackParamList, 'Camera'>>();
+  const orderCode = route.params?.orderCode;
   const { cameraRef, permission, requestPermission, photoUri, error, takePhoto, reset } =
     useCamera();
+  const { user } = useAuth();
+  const { complete, isSaving } = useOrder(orderCode, user);
+  const [feedback, setFeedback] = useState<string | null>(null);
+  const [deliveryConfirmed, setDeliveryConfirmed] = useState(false);
+
+  async function handleConfirmDelivery() {
+    const result = await complete();
+    setDeliveryConfirmed(result.ok);
+    setFeedback(result.message);
+  }
+
+  function closeFeedback() {
+    setFeedback(null);
+    if (deliveryConfirmed) navigation.popToTop();
+  }
 
   return (
     <View style={styles.screen}>
@@ -31,6 +54,9 @@ export function CameraScreen() {
             <View style={styles.viewfinder}>
               <Image source={{ uri: photoUri }} style={styles.media} />
             </View>
+            {orderCode ? (
+              <Button label="Confirmar entrega" onPress={handleConfirmDelivery} loading={isSaving} />
+            ) : null}
             <Button label="Nova foto" onPress={reset} variant="secondary" />
           </>
         ) : (
@@ -51,6 +77,8 @@ export function CameraScreen() {
 
         <Button label="Voltar ao dashboard" onPress={() => navigation.goBack()} variant="link" />
       </View>
+
+      <FeedbackModal visible={feedback !== null} message={feedback ?? ''} onClose={closeFeedback} />
     </View>
   );
 }
