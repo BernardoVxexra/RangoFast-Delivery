@@ -1,10 +1,31 @@
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useCamera } from '../hooks/useCamera';
+import { useAuth } from '../hooks/useAuth';
+import { useOrder } from '../hooks/useOrder';
 import { Button } from '../components/Button';
+import { FeedbackModal } from '../components/FeedbackModal';
 
 export function CameraScreen() {
   const navigate = useNavigate();
+  const routerLocation = useLocation();
+  const orderCode = (routerLocation.state as { orderCode?: string } | null)?.orderCode;
   const { videoRef, isActive, photoUri, error, startCamera, takePhoto, reset } = useCamera();
+  const { user } = useAuth();
+  const { complete, isSaving } = useOrder(orderCode, user);
+  const [feedback, setFeedback] = useState<string | null>(null);
+  const [deliveryConfirmed, setDeliveryConfirmed] = useState(false);
+
+  async function handleConfirmDelivery() {
+    const result = await complete();
+    setDeliveryConfirmed(result.ok);
+    setFeedback(result.message);
+  }
+
+  function closeFeedback() {
+    setFeedback(null);
+    if (deliveryConfirmed) navigate('/dashboard');
+  }
 
   return (
     <div className="screen">
@@ -21,6 +42,9 @@ export function CameraScreen() {
             <div className="camera-viewfinder">
               <img src={photoUri} alt="Comprovante capturado" className="camera-preview" />
             </div>
+            {orderCode && (
+              <Button label="Confirmar entrega" onClick={handleConfirmDelivery} loading={isSaving} />
+            )}
             <Button label="Nova foto" onClick={reset} variant="secondary" />
           </>
         ) : (
@@ -43,9 +67,10 @@ export function CameraScreen() {
         )}
 
         <hr className="route-divider" />
-
         <Button label="Voltar ao dashboard" onClick={() => navigate('/dashboard')} variant="link" />
       </div>
+
+      <FeedbackModal visible={feedback !== null} message={feedback ?? ''} onClose={closeFeedback} />
     </div>
   );
 }
