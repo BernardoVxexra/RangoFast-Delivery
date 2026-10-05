@@ -1,8 +1,8 @@
-# RangoFast Delivery — App do Entregador
+# RangoFast Delivery O App do Entregador
 
-Projeto da Atividade 3 (Fatec): aplicativo para entregadores da plataforma RangoFast Delivery, em duas versões — Mobile (Expo/React Native) e Web (ReactJS/Vite) — seguindo a mesma Arquitetura em Camadas.
+Projeto da Atividade 3 (Fatec): aplicativo para entregadores da plataforma RangoFast Delivery, em duas versões — Mobile (Expo/React Native) e Web (ReactJS/Vite), seguindo a mesma Arquitetura em Camadas.
 
-Documentação técnica completa, com a motivação de cada decisão: [`docs/GUIA_TECNICO.md`](docs/GUIA_TECNICO.md).
+Documentação técnica completa, com a motivação de cada decisão: `[docs/GUIA_TECNICO.md](docs/GUIA_TECNICO.md)`.
 
 ## Estrutura
 
@@ -13,7 +13,9 @@ RangoFast-Delivery/
 └── web/                   # ReactJS + Vite + TypeScript
 ```
 
-## Como rodar — Mobile
+
+
+## Como rodar em Mobile
 
 ```bash
 cd mobile
@@ -24,7 +26,7 @@ npx expo start
 
 Abra no Expo Go (Android) ou em um emulador. Permissões de GPS e Câmera são solicitadas em tempo de execução.
 
-## Como rodar — Web
+## Como rodar na Web
 
 ```bash
 cd web
@@ -33,7 +35,7 @@ npm install
 npm run dev
 ```
 
-Acesse `http://localhost:5173` (ou a porta indicada pelo Vite). O proxy de desenvolvimento configurado em `vite.config.ts` é necessário porque a API não envia cabeçalhos CORS — ver detalhes no guia técnico.
+Acesse `http://localhost:5173` (ou a porta indicada pelo Vite). O proxy de desenvolvimento configurado em `vite.config.ts` é necessário porque a API não envia cabeçalhos CORS, ver detalhes no guia técnico.
 
 ## API utilizada
 
