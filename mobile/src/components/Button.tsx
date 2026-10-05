@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   },
   primary: {
     backgroundColor: colors.routeAmber,
-    // Sombra sólida deslocada, não blur — efeito de ficha/etiqueta empilhada.
+    // Sombra sólida deslocada, não blur, efeito de ficha/etiqueta empilhada.
     shadowColor: colors.ink,
     shadowOffset: { width: 3, height: 3 },
     shadowOpacity: 1,

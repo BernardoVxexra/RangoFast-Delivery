@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL ?? '';
 
-// No React Native, o cookie de sessão é armazenado e reenviado automaticamente
+// cookie de sessão é armazenado e reenviado automaticamente
 // pela camada nativa de rede (OkHttp no Android, NSURLSession no iOS) durante
 // o tempo de vida do app — não existe "withCredentials" equivalente aqui
 // porque esse conceito é específico do modelo de segurança de navegadores.
