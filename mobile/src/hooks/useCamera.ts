@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { CameraView, useCameraPermissions } from 'expo-camera';
 
 export function useCamera() {
+  // CameraView expõe a captura via método imperativo no ref, não via props.
   const cameraRef = useRef<CameraView>(null);
   const [permission, requestPermission] = useCameraPermissions();
   const [photoUri, setPhotoUri] = useState<string | null>(null);

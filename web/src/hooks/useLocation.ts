@@ -28,7 +28,10 @@ export function useLocation() {
       () => {
         setError('Não foi possível obter a localização.');
         setIsLoading(false);
-      }
+      },
+      // Sem timeout, o navegador pode deixar a chamada pendente
+      // indefinidamente quando a permissão não é respondida.
+      { timeout: 10000 }
     );
   }
 

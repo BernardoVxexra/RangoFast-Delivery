@@ -14,6 +14,8 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
+// O estado guarda só o username: a senha existe apenas durante a chamada a
+// authApi e nunca é atribuída a uma variável de estado.
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isLoading, setIsLoading] = useState(false);

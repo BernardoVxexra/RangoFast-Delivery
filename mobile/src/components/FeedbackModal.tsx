@@ -1,5 +1,6 @@
 import { Modal, View, Text, StyleSheet } from 'react-native';
 import { Button } from './Button';
+import { colors, font, radius } from '../theme';
 
 interface FeedbackModalProps {
   visible: boolean;
@@ -23,19 +24,30 @@ export function FeedbackModal({ visible, message, onClose }: FeedbackModalProps)
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
+    backgroundColor: 'rgba(26, 30, 34, 0.6)',
     alignItems: 'center',
     justifyContent: 'center',
+    paddingHorizontal: 24,
   },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
+    backgroundColor: colors.paperRaised,
+    borderRadius: radius.md,
+    borderWidth: 1,
+    borderColor: colors.hairline,
     padding: 24,
-    width: '80%',
+    width: '100%',
+    maxWidth: 320,
     gap: 16,
+    shadowColor: colors.ink,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 4,
   },
   message: {
-    fontSize: 16,
+    fontFamily: font.regular,
+    fontSize: 15,
+    color: colors.ink,
     textAlign: 'center',
   },
 });

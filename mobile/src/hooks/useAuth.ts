@@ -22,6 +22,8 @@ export function useAuth() {
     return null;
   }
 
+  // Validação roda antes de qualquer chamada de rede: evita requisição
+  // desnecessária e garante que o servidor nunca recebe entrada malformada.
   async function loginWithValidation(username: string, password: string) {
     const validationError = validateLogin(username, password);
     if (validationError) throw new Error(validationError);

@@ -29,6 +29,9 @@ export function useCamera() {
   }
 
   function takePhoto() {
+    // getUserMedia só entrega um stream de vídeo contínuo; para obter uma
+    // imagem estática é preciso desenhar o frame atual em um canvas e
+    // exportá-lo. A câmera é liberada logo depois, por privacidade.
     const video = videoRef.current;
     if (!video) return;
     const canvas = document.createElement('canvas');

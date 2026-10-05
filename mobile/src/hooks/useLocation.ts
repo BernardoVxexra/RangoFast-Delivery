@@ -15,6 +15,8 @@ export function useLocation() {
     setIsLoading(true);
     setError(null);
     try {
+      // getCurrentPositionAsync falha silenciosamente sem permissão prévia;
+      // por isso ela é sempre solicitada aqui, nunca assumida como concedida.
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setError('Permissão de localização negada.');

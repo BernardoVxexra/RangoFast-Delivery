@@ -3,17 +3,13 @@ interface ButtonProps {
   onClick: () => void;
   loading?: boolean;
   disabled?: boolean;
-  variant?: 'primary' | 'secondary';
+  variant?: 'primary' | 'secondary' | 'link';
 }
 
 export function Button({ label, onClick, loading, disabled, variant = 'primary' }: ButtonProps) {
+  const className = variant === 'link' ? 'link' : `button button--${variant}`;
   return (
-    <button
-      type="button"
-      className={`button button--${variant}`}
-      onClick={onClick}
-      disabled={disabled || loading}
-    >
+    <button type="button" className={className} onClick={onClick} disabled={disabled || loading}>
       {loading ? 'Carregando...' : label}
     </button>
   );

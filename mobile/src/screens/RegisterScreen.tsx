@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAuth } from '../hooks/useAuth';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 import { FeedbackModal } from '../components/FeedbackModal';
+import { AppHeader } from '../components/AppHeader';
+import { RouteDivider } from '../components/RouteDivider';
+import { colors } from '../theme';
 import type { AuthStackParamList } from '../routes/AuthStack';
 
 export function RegisterScreen() {
@@ -26,37 +29,42 @@ export function RegisterScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Criar conta</Text>
+    <KeyboardAvoidingView
+      style={styles.screen}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <AppHeader subtitle="Criar conta de entregador" />
 
-      <Input label="Usuário" value={username} onChangeText={setUsername} autoCapitalize="none" />
-      <Input label="E-mail" value={email} onChangeText={setEmail} keyboardType="email-address" />
-      <Input label="CEP" value={cep} onChangeText={setCep} keyboardType="numeric" />
-      <Input label="Senha" value={password} onChangeText={setPassword} secureTextEntry />
+      <ScrollView contentContainerStyle={styles.body}>
+        <Input label="Usuário" value={username} onChangeText={setUsername} autoCapitalize="none" />
+        <Input label="E-mail" value={email} onChangeText={setEmail} keyboardType="email-address" />
+        <Input label="CEP" value={cep} onChangeText={setCep} keyboardType="numeric" />
+        <Input label="Senha" value={password} onChangeText={setPassword} secureTextEntry />
 
-      <Button label="Cadastrar" onPress={handleRegister} loading={isLoading} />
-      <Button label="Voltar" onPress={() => navigation.navigate('Login')} />
+        <Button label="Cadastrar" onPress={handleRegister} loading={isLoading} />
+
+        <RouteDivider />
+
+        <Button label="Voltar" onPress={() => navigation.navigate('Login')} variant="link" />
+      </ScrollView>
 
       <FeedbackModal
         visible={feedback !== null}
         message={feedback ?? ''}
         onClose={() => setFeedback(null)}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
     flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-    gap: 12,
+    backgroundColor: colors.paper,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    textAlign: 'center',
-    marginBottom: 24,
+  body: {
+    paddingHorizontal: 24,
+    paddingVertical: 28,
+    gap: 12,
   },
 });

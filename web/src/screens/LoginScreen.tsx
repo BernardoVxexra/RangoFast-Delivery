@@ -23,25 +23,36 @@ export function LoginScreen() {
 
   return (
     <div className="screen">
-      <h1>RangoFast Delivery</h1>
-      <p>Acesso do entregador</p>
+      <header className="app-header">
+        <div className="wordmark">
+          Rango<span className="wordmark__chevron">&gt;</span>Fast
+        </div>
+        <p className="app-header__subtitle">Acesso do entregador</p>
+      </header>
 
-      <Input label="Usuário" value={username} onChange={(e) => setUsername(e.target.value)} />
-      <Input
-        label="Senha"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+      <div className="screen__body screen__body--center">
+        <Input label="Usuário" value={username} onChange={(e) => setUsername(e.target.value)} />
+        <Input
+          label="Senha"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <Button label="Entrar" onClick={handleLogin} loading={isLoading} />
-      <Link to="/register">Criar conta</Link>
+        <Button label="Entrar" onClick={handleLogin} loading={isLoading} />
 
-      <FeedbackModal
-        visible={feedback !== null}
-        message={feedback ?? ''}
-        onClose={() => setFeedback(null)}
-      />
+        <hr className="route-divider" />
+
+        <Link className="link" to="/register">
+          Criar conta
+        </Link>
+
+        <FeedbackModal
+          visible={feedback !== null}
+          message={feedback ?? ''}
+          onClose={() => setFeedback(null)}
+        />
+      </div>
     </div>
   );
 }

@@ -16,6 +16,8 @@ export interface AuthUser {
   username: string;
 }
 
+// O corpo da resposta não é usado: sucesso é o próprio status HTTP (o
+// interceptor de client.ts já rejeita a promise em caso de erro).
 export async function register(payload: RegisterPayload): Promise<AuthUser> {
   await apiClient.post('/create', payload);
   return { username: payload.username };

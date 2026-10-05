@@ -1,3 +1,5 @@
+// Renomeado para "Switch" só para não colidir com o nosso próprio
+// componente "Routes" exportado abaixo.
 import { BrowserRouter, Routes as Switch, Route, Navigate } from 'react-router-dom';
 import { PublicRoute } from './PublicRoute';
 import { PrivateRoute } from './PrivateRoute';

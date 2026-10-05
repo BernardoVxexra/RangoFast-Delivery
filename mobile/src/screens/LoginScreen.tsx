@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAuth } from '../hooks/useAuth';
 import { Input } from '../components/Input';
 import { Button } from '../components/Button';
 import { FeedbackModal } from '../components/FeedbackModal';
+import { AppHeader } from '../components/AppHeader';
+import { RouteDivider } from '../components/RouteDivider';
+import { colors } from '../theme';
 import type { AuthStackParamList } from '../routes/AuthStack';
 
 export function LoginScreen() {
@@ -24,41 +27,42 @@ export function LoginScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>RangoFast Delivery</Text>
-      <Text style={styles.subtitle}>Acesso do entregador</Text>
+    <KeyboardAvoidingView
+      style={styles.screen}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+    >
+      <AppHeader subtitle="Acesso do entregador" />
 
-      <Input label="Usuário" value={username} onChangeText={setUsername} autoCapitalize="none" />
-      <Input label="Senha" value={password} onChangeText={setPassword} secureTextEntry />
+      <View style={styles.body}>
+        <Input label="Usuário" value={username} onChangeText={setUsername} autoCapitalize="none" />
+        <Input label="Senha" value={password} onChangeText={setPassword} secureTextEntry />
 
-      <Button label="Entrar" onPress={handleLogin} loading={isLoading} />
-      <Button label="Criar conta" onPress={() => navigation.navigate('Register')} />
+        <Button label="Entrar" onPress={handleLogin} loading={isLoading} />
+
+        <RouteDivider />
+
+        <Button label="Criar conta" onPress={() => navigation.navigate('Register')} variant="link" />
+      </View>
 
       <FeedbackModal
         visible={feedback !== null}
         message={feedback ?? ''}
         onClose={() => setFeedback(null)}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  screen: {
+    flex: 1,
+    backgroundColor: colors.paper,
+  },
+  body: {
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 24,
+    paddingVertical: 28,
     gap: 12,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: '700',
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 14,
-    color: '#666',
-    textAlign: 'center',
-    marginBottom: 24,
   },
 });

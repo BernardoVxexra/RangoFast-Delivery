@@ -25,26 +25,43 @@ export function RegisterScreen() {
 
   return (
     <div className="screen">
-      <h1>Criar conta</h1>
+      <header className="app-header">
+        <div className="wordmark">
+          Rango<span className="wordmark__chevron">&gt;</span>Fast
+        </div>
+        <p className="app-header__subtitle">Criar conta de entregador</p>
+      </header>
 
-      <Input label="Usuário" value={username} onChange={(e) => setUsername(e.target.value)} />
-      <Input label="E-mail" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-      <Input label="CEP" value={cep} onChange={(e) => setCep(e.target.value)} />
-      <Input
-        label="Senha"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+      <div className="screen__body screen__body--center">
+        <Input label="Usuário" value={username} onChange={(e) => setUsername(e.target.value)} />
+        <Input
+          label="E-mail"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input label="CEP" value={cep} onChange={(e) => setCep(e.target.value)} />
+        <Input
+          label="Senha"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
-      <Button label="Cadastrar" onClick={handleRegister} loading={isLoading} />
-      <Link to="/login">Voltar</Link>
+        <Button label="Cadastrar" onClick={handleRegister} loading={isLoading} />
 
-      <FeedbackModal
-        visible={feedback !== null}
-        message={feedback ?? ''}
-        onClose={() => setFeedback(null)}
-      />
+        <hr className="route-divider" />
+
+        <Link className="link" to="/login">
+          Voltar
+        </Link>
+
+        <FeedbackModal
+          visible={feedback !== null}
+          message={feedback ?? ''}
+          onClose={() => setFeedback(null)}
+        />
+      </div>
     </div>
   );
 }

@@ -33,7 +33,8 @@
         {
           "locationAlwaysAndWhenInUsePermission": "O RangoFast Delivery usa a localização para registrar as coordenadas da entrega."
         }
-      ]
+      ],
+      "expo-font"
     ]
   }
 }

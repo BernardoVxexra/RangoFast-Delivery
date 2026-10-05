@@ -1,88 +1,236 @@
+/* Tokens: ver docs/GUIA_TECNICO.md para a motivação da identidade visual. */
 :root {
-  color-scheme: light dark;
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
+  --paper: #eef1f3;
+  --paper-raised: #ffffff;
+  --ink: #1a1e22;
+  --asphalt: #262b30;
+  --route-amber: #e59421;
+  --route-amber-ink: #1a1e22;
+  --signal-blue: #3d7dff;
+  --alert-red: #d4483f;
+  --hairline: #d4d9dc;
+
+  color-scheme: light;
+  font-family: 'Archivo', system-ui, sans-serif;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
-  background: #fafafa;
-  color: #111;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* Faixa estrutural escura: reaparece no topo de toda tela, como o
+   cabeçalho fixo de um manifesto de carga. */
+.app-header {
+  background: var(--ink);
+  color: var(--paper);
+  padding: 28px 24px 22px;
+}
+
+.wordmark {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+.wordmark__chevron {
+  color: var(--route-amber);
+  font-weight: 900;
+}
+
+.app-header__subtitle {
+  margin: 6px 0 0;
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(238, 241, 243, 0.68);
 }
 
 .screen {
   max-width: 420px;
-  margin: 48px auto;
-  padding: 0 24px;
+  margin: 0 auto;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+}
+
+.screen__body {
+  flex: 1;
+  padding: 28px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.screen__body--center {
+  justify-content: center;
+}
+
+.screen__title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+
+/* Único motivo recorrente da interface: uma régua tracejada, referência
+   direta à linha de faixa de rodovia. Usado só para separar seções. */
+.route-divider {
+  border: none;
+  border-top: 2px dashed var(--hairline);
+  margin: 4px 0;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
 
 .field label {
-  font-size: 14px;
-  color: #333;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: none;
+  color: var(--ink);
 }
 
 .field input {
-  padding: 10px 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  font-family: inherit;
   font-size: 16px;
+  background: var(--paper-raised);
+  color: var(--ink);
+}
+
+.field input:focus-visible {
+  outline: 2px solid var(--signal-blue);
+  outline-offset: 1px;
 }
 
 .field-error {
-  font-size: 12px;
-  color: #d32f2f;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--alert-red);
 }
 
 .error-text {
-  color: #d32f2f;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--alert-red);
   text-align: center;
 }
 
+.muted-text {
+  font-size: 14px;
+  font-weight: 500;
+  color: #5b6166;
+}
+
 .button {
-  padding: 12px 16px;
-  border-radius: 8px;
-  border: none;
-  font-size: 16px;
-  font-weight: 600;
+  padding: 13px 16px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
   cursor: pointer;
 }
 
 .button--primary {
-  background: #1f6feb;
-  color: #fff;
+  background: var(--route-amber);
+  color: var(--route-amber-ink);
+  /* Sombra sólida deslocada no lugar do blur genérico de card SaaS —
+     efeito de ficha/etiqueta empilhada. */
+  box-shadow: 3px 3px 0 var(--ink);
+}
+
+.button--primary:active:not(:disabled) {
+  box-shadow: 1px 1px 0 var(--ink);
+  transform: translate(2px, 2px);
 }
 
 .button--secondary {
-  background: #e5e5e5;
-  color: #111;
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--hairline);
 }
 
 .button:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: not-allowed;
+  box-shadow: none;
+}
+
+.link {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--signal-blue);
+  text-decoration: underline;
+  cursor: pointer;
+  text-align: left;
+}
+
+/* Etiqueta de status: informa um estado real (não é um rótulo decorativo). */
+.status-chip {
+  display: inline-flex;
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: rgba(229, 148, 33, 0.16);
+  color: var(--route-amber);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* Leitura de telemetria (coordenadas, horário): números levemente
+   espaçados, como um painel de instrumento, sem trocar de família. */
+.telemetry-card {
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  background: var(--paper-raised);
+  padding: 16px;
+}
+
+.telemetry-card__label {
+  margin: 0 0 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #5b6166;
+}
+
+.telemetry-card__value {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  font-variant-numeric: tabular-nums;
 }
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(26, 30, 34, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 24px;
 }
 
 .modal-card {
-  background: #fff;
-  border-radius: 12px;
+  background: var(--paper-raised);
+  border: 1px solid var(--hairline);
+  border-radius: 6px;
+  box-shadow: 4px 4px 0 var(--ink);
   padding: 24px;
   width: 280px;
   display: flex;
@@ -91,8 +239,58 @@ body {
   text-align: center;
 }
 
+.modal-card p {
+  margin: 0;
+  font-size: 15px;
+}
+
+/* Visor da câmera com cantos em mira, como um visor de scanner — reforça
+   que a foto é um comprovante a ser capturado com precisão. */
+.camera-viewfinder {
+  position: relative;
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--ink);
+}
+
 .camera-preview {
+  display: block;
   width: 100%;
-  border-radius: 12px;
-  background: #000;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+.camera-viewfinder__corner {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--route-amber);
+}
+
+.camera-viewfinder__corner--tl {
+  top: 10px;
+  left: 10px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.camera-viewfinder__corner--tr {
+  top: 10px;
+  right: 10px;
+  border-left: none;
+  border-bottom: none;
+}
+
+.camera-viewfinder__corner--bl {
+  bottom: 10px;
+  left: 10px;
+  border-right: none;
+  border-top: none;
+}
+
+.camera-viewfinder__corner--br {
+  bottom: 10px;
+  right: 10px;
+  border-left: none;
+  border-top: none;
 }
