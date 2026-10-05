@@ -32,7 +32,7 @@ function authProxyPlugin(): Plugin {
           body: hasBody ? body : undefined,
         });
 
-        const response = await forwardToAuthApi(request, `/fatec/login/v1${req.url}`);
+        const response = await forwardToAuthApi(request, req.url ?? '/');
 
         res.statusCode = response.status;
         response.headers.forEach((value, key) => res.setHeader(key, value));

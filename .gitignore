@@ -6,3 +6,6 @@ docs/superpowers/
 
 # Workspace/ledger interno dos skills de execução de plano — scratch local.
 .superpowers/
+
+# Artefatos de debug de sessões de teste manual com Playwright MCP.
+.playwright-mcp/
