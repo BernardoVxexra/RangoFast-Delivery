@@ -16,3 +16,7 @@ export function isStrongPassword(value: string): boolean {
 export function isRequired(value: string): boolean {
   return value.trim().length > 0;
 }
+
+export function isValidOrderCode(value: string): boolean {
+  return /^RF-\d{3}$/i.test(value.trim());
+}
