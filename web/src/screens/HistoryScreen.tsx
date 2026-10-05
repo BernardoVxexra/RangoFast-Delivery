@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import { getDeliveredByUser, Order } from '../data/ordersRepository';
+import { getDeliveredByUser } from '../data/ordersRepository';
+import type { Order } from '../data/ordersRepository';
 import { Button } from '../components/Button';
 
 function formatCurrency(value: number) {
