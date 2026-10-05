@@ -69,6 +69,13 @@ Solução adotada em `web/vite.config.ts`: um proxy de desenvolvimento. O navega
 
 Também descoberto por inspeção direta da resposta: o cookie de sessão (`access_token`) já é `HttpOnly` por conta do servidor e tem validade de apenas 120 segundos (`Max-Age=120`). Isto é, o próprio backend já protege o cookie contra leitura via JavaScript, reforça por que nenhuma tentativa de ler o cookie do lado do cliente seria produtiva, e explica por que a sessão expira rápido em ambas as plataformas.
 
+**Atualização:** o proxy de CORS/cookie da Web deixou de ser exclusivo de desenvolvimento. A
+lógica de repasse foi extraída para `web/server/authProxy.ts`, reusada tanto pelo plugin de
+desenvolvimento do Vite (`vite.config.ts`) quanto por um servidor Express de produção
+(`web/server/index.ts`, rodado via `npm run start` depois do `npm run build`). Isso muda o modelo
+de deploy da Web de "hospedagem estática" para "processo Node" — ver seção "Produção" no
+`README.md`.
+
 ## 5. Segurança: checklist de defesa
 
 1. Senha, payload de autenticação e qualquer header de cookie nunca são passados para `console.log`, em nenhuma camada, em nenhuma plataforma.
@@ -77,7 +84,13 @@ Também descoberto por inspeção direta da resposta: o cookie de sessão (`acce
 4. O cookie de sessão é `HttpOnly` por definição do backend: nem o código do app nem um eventual script malicioso injetado conseguem lê-lo via JavaScript, em nenhuma das duas plataformas.
 5. `AuthContext.logout()` limpa o estado local imediatamente. Não existe endpoint de invalidação de sessão fornecido pela API; o cookie expira por conta própria em 120 segundos.
 6. Toda comunicação com a API ocorre em HTTPS (garantido pelo próprio domínio `onrender.com`); não há nenhum caminho de código que permita downgrade para HTTP.
-7. O proxy de CORS (seção 4) existe só em ambiente de desenvolvimento (`vite.config.ts`, nunca entra no bundle de produção), não é uma forma de contornar segurança, é uma ponte necessária porque o backend não foi pensado para ser chamado direto do navegador.
+7. O proxy de CORS (seção 4) hoje roda tanto em desenvolvimento quanto em produção, sempre a
+   partir de um processo Node controlado por este projeto (nunca do navegador direto) — não é
+   uma forma de contornar segurança, é a ponte necessária porque o backend não foi pensado para
+   ser chamado direto do navegador.
+8. Código de pedido (`RF-000`) é validado por `isValidOrderCode`/`ORDER_CODE_PATTERN` antes de
+   qualquer leitura local, e `acceptOrder`/`cancelOrder`/`completeOrder` sempre conferem o dono
+   da reserva no repositório, nunca confiam em decisão tomada só na tela.
 
 
 
@@ -85,8 +98,16 @@ Também descoberto por inspeção direta da resposta: o cookie de sessão (`acce
 
 Ver `[README.md](../README.md)` na raiz do projeto.
 
-## 7. Extensões não implementadas
+## 7. Extensões implementadas desde a primeira entrega
 
-- Escaneamento de QR Code do cliente (mencionado no guia original como alternativa à foto do comprovante): exigiria uma lib adicional de leitura de QR em ambas as plataformas. Deixado como próximo passo para não inflar o escopo desta atividade.
-- Persistência de sessão entre reinícios do app Mobile: dependeria de uma lib nativa de cookie fora do Expo Go (seção 4). Fora de escopo pela mesma razão.
+- Escaneamento de QR Code: implementado (mobile, `expo-camera` com `barcodeScannerSettings`),
+  junto com um domínio "Pedido" mockado localmente (`src/data/ordersRepository.ts` em cada
+  plataforma) para dar ao QR Code algo de verdade para identificar. Ver
+  `docs/superpowers/specs/2026-10-05-pedidos-qrcode-design.md` para o desenho completo (fora do
+  git, uso interno).
+- Proxy de cookie em produção na Web: implementado via `web/server/authProxy.ts` compartilhado
+  entre o plugin de desenvolvimento do Vite e um servidor Express de produção.
+
+Continua fora de escopo, pela mesma razão já registrada: persistência de sessão entre reinícios
+do app Mobile (dependeria de uma lib nativa de cookie fora do Expo Go).
 
