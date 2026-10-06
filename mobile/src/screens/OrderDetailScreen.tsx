@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, Image, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAuth } from '../hooks/useAuth';
@@ -32,7 +32,7 @@ export function OrderDetailScreen() {
     <View style={styles.screen}>
       <AppHeader subtitle="Detalhe do pedido" />
 
-      <View style={styles.body}>
+      <ScrollView contentContainerStyle={styles.body}>
         {isLoading ? (
           <ActivityIndicator color={colors.ink} />
         ) : !order ? (
@@ -67,14 +67,19 @@ export function OrderDetailScreen() {
             )}
 
             {order.status === 'delivered' && (
-              <Text style={styles.mutedText}>Entrega concluída.</Text>
+              <>
+                <Text style={styles.mutedText}>Entrega concluída.</Text>
+                {order.deliveryPhotoUri && (
+                  <Image source={{ uri: order.deliveryPhotoUri }} style={styles.proofPhoto} />
+                )}
+              </>
             )}
           </>
         )}
 
         <RouteDivider />
         <Button label="Voltar" onPress={() => navigation.goBack()} variant="link" />
-      </View>
+      </ScrollView>
 
       <FeedbackModal visible={feedback !== null} message={feedback ?? ''} onClose={() => setFeedback(null)} />
     </View>
@@ -92,7 +97,7 @@ function Info({ label, value }: { label: string; value: string }) {
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.paper },
-  body: { flex: 1, paddingHorizontal: 24, paddingVertical: 28, gap: 12 },
+  body: { paddingHorizontal: 24, paddingVertical: 28, gap: 12 },
   code: { fontFamily: font.black, fontSize: 28, color: colors.ink, letterSpacing: 0.5 },
   infoCard: {
     borderWidth: 1,
@@ -107,4 +112,9 @@ const styles = StyleSheet.create({
   infoValue: { fontFamily: font.regular, fontSize: 15, color: colors.ink },
   mutedText: { fontFamily: font.regular, fontSize: 14, color: colors.muted },
   errorText: { fontFamily: font.regular, fontSize: 14, color: colors.alertRed },
+  proofPhoto: {
+    width: '100%',
+    aspectRatio: 3 / 4,
+    borderRadius: radius.md,
+  },
 });

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAuth } from '../hooks/useAuth';
@@ -24,7 +24,7 @@ export function ProfileScreen() {
     <View style={styles.screen}>
       <AppHeader subtitle="Perfil" />
 
-      <View style={styles.body}>
+      <ScrollView contentContainerStyle={styles.body}>
         <View style={styles.card}>
           <Text style={styles.label}>Usuário</Text>
           <Text style={styles.value}>{user?.username}</Text>
@@ -38,14 +38,14 @@ export function ProfileScreen() {
         <RouteDivider />
         <Button label="Sair" onPress={logout} variant="secondary" />
         <Button label="Voltar" onPress={() => navigation.goBack()} variant="link" />
-      </View>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.paper },
-  body: { flex: 1, paddingHorizontal: 24, paddingVertical: 28, gap: 12 },
+  body: { paddingHorizontal: 24, paddingVertical: 28, gap: 12 },
   card: {
     borderWidth: 1,
     borderColor: colors.hairline,

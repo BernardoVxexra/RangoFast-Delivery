@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, Image, FlatList, StyleSheet, ActivityIndicator } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAuth } from '../hooks/useAuth';
@@ -45,6 +45,9 @@ export function HistoryScreen() {
             contentContainerStyle={{ gap: 12 }}
             renderItem={({ item }) => (
               <View style={styles.card}>
+                {item.deliveryPhotoUri && (
+                  <Image source={{ uri: item.deliveryPhotoUri }} style={styles.thumbnail} />
+                )}
                 <Text style={styles.code}>{item.code}</Text>
                 <Text style={styles.restaurant}>{item.restaurantName}</Text>
                 <Text style={styles.mutedText}>
@@ -76,4 +79,9 @@ const styles = StyleSheet.create({
   code: { fontFamily: font.bold, fontSize: 16, color: colors.ink },
   restaurant: { fontFamily: font.regular, fontSize: 14, color: colors.ink },
   mutedText: { fontFamily: font.regular, fontSize: 13, color: colors.muted },
+  thumbnail: {
+    width: '100%',
+    height: 140,
+    borderRadius: radius.md,
+  },
 });

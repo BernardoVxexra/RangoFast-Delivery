@@ -2,12 +2,16 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import express from 'express';
 import { forwardToAuthApi } from './authProxy';
+import { handleDeliveryPhotoUpload, uploadsDir } from './photoStorage';
+import { serveUploads } from './uploadsStatic';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const distDir = path.resolve(__dirname, '..', 'dist');
 const PORT = Number(process.env.PORT) || 4173;
 
 const app = express();
+
+app.use('/uploads', serveUploads(uploadsDir));
 
 app.use('/api', express.raw({ type: '*/*' }), async (req, res) => {
   const headers = new Headers();
@@ -25,7 +29,10 @@ app.use('/api', express.raw({ type: '*/*' }), async (req, res) => {
     body: hasBody ? req.body : undefined,
   });
 
-  const response = await forwardToAuthApi(request, req.url);
+  const response =
+    req.url === '/delivery-photos'
+      ? await handleDeliveryPhotoUpload(request)
+      : await forwardToAuthApi(request, req.url);
 
   res.status(response.status);
   response.headers.forEach((value, key) => res.setHeader(key, value));

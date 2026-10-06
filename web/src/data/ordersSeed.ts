@@ -11,6 +11,7 @@ export const ordersSeed: Order[] = [
     status: 'available',
     assignedTo: null,
     deliveredAt: null,
+    deliveryPhotoUri: null,
   },
   {
     code: 'RF-002',
@@ -22,6 +23,7 @@ export const ordersSeed: Order[] = [
     status: 'available',
     assignedTo: null,
     deliveredAt: null,
+    deliveryPhotoUri: null,
   },
   {
     code: 'RF-003',
@@ -33,6 +35,7 @@ export const ordersSeed: Order[] = [
     status: 'available',
     assignedTo: null,
     deliveredAt: null,
+    deliveryPhotoUri: null,
   },
   {
     code: 'RF-004',
@@ -44,6 +47,7 @@ export const ordersSeed: Order[] = [
     status: 'available',
     assignedTo: null,
     deliveredAt: null,
+    deliveryPhotoUri: null,
   },
   {
     code: 'RF-005',
@@ -55,5 +59,6 @@ export const ordersSeed: Order[] = [
     status: 'available',
     assignedTo: null,
     deliveredAt: null,
+    deliveryPhotoUri: null,
   },
 ];

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAuth } from '../hooks/useAuth';
@@ -35,7 +35,7 @@ export function DashboardScreen() {
     <View style={styles.screen}>
       <AppHeader subtitle={`Olá, ${user?.username ?? ''}`} />
 
-      <View style={styles.body}>
+      <ScrollView contentContainerStyle={styles.body}>
         <View style={styles.statusChip}>
           <Text style={styles.statusChipText}>Disponível para entregas</Text>
         </View>
@@ -98,7 +98,7 @@ export function DashboardScreen() {
         <Button label="Histórico de entregas" onPress={() => navigation.navigate('History')} variant="secondary" />
         <Button label="Perfil" onPress={() => navigation.navigate('Profile')} variant="secondary" />
         <Button label="Sair" onPress={logout} variant="link" />
-      </View>
+      </ScrollView>
 
       <FeedbackModal
         visible={feedback !== null}
@@ -115,7 +115,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.paper,
   },
   body: {
-    flex: 1,
     paddingHorizontal: 24,
     paddingVertical: 28,
     gap: 12,

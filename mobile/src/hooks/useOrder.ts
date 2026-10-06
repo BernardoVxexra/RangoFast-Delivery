@@ -77,9 +77,12 @@ export function useOrder(code: string | undefined, user: AuthUser | null) {
     return runAction(() => cancelOrder(code, user.username), 'Entrega cancelada.');
   };
 
-  const complete = () => {
+  const complete = (photoUri: string | null = null) => {
     if (!user || !code) return Promise.resolve({ ok: false, message: 'Faça login novamente.' });
-    return runAction(() => completeOrder(code, user.username), 'Entrega concluída com sucesso!');
+    return runAction(
+      () => completeOrder(code, user.username, photoUri),
+      'Entrega concluída com sucesso!'
+    );
   };
 
   const isMine = !!user && !!order && order.assignedTo?.username === user.username;

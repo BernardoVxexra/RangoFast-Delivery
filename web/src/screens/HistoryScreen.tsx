@@ -41,6 +41,13 @@ export function HistoryScreen() {
         ) : (
           orders.map((order) => (
             <div className="order-card" key={order.code}>
+              {order.deliveryPhotoUri && (
+                <img
+                  src={order.deliveryPhotoUri}
+                  alt={`Comprovante da entrega ${order.code}`}
+                  className="order-card__thumbnail"
+                />
+              )}
               <p className="order-card__value">{order.code} · {order.restaurantName}</p>
               <p className="muted-text">
                 {formatCurrency(order.value)} · {formatDateTime(order.deliveredAt!)}

@@ -76,7 +76,7 @@ desenvolvimento do Vite (`vite.config.ts`) quanto por um servidor Express de pro
 de deploy da Web de "hospedagem estática" para "processo Node" — ver seção "Produção" no
 `README.md`.
 
-## 5. Segurança: checklist de defesa
+## 5. Segurança: checklist de defesa do Projeto
 
 1. Senha, payload de autenticação e qualquer header de cookie nunca são passados para `console.log`, em nenhuma camada, em nenhuma plataforma.
 2. Toda submissão de formulário passa por `utils/validators.ts` (e-mail, CEP, tamanho mínimo de senha) antes de qualquer chamada de rede.
@@ -85,11 +85,11 @@ de deploy da Web de "hospedagem estática" para "processo Node" — ver seção 
 5. `AuthContext.logout()` limpa o estado local imediatamente. Não existe endpoint de invalidação de sessão fornecido pela API; o cookie expira por conta própria em 120 segundos.
 6. Toda comunicação com a API ocorre em HTTPS (garantido pelo próprio domínio `onrender.com`); não há nenhum caminho de código que permita downgrade para HTTP.
 7. O proxy de CORS (seção 4) hoje roda tanto em desenvolvimento quanto em produção, sempre a
-   partir de um processo Node controlado por este projeto (nunca do navegador direto) — não é
+  partir de um processo Node controlado por este projeto (nunca do navegador direto) — não é
    uma forma de contornar segurança, é a ponte necessária porque o backend não foi pensado para
    ser chamado direto do navegador.
 8. Código de pedido (`RF-000`) é validado por `isValidOrderCode`/`ORDER_CODE_PATTERN` antes de
-   qualquer leitura local, e `acceptOrder`/`cancelOrder`/`completeOrder` sempre conferem o dono
+  qualquer leitura local, e `acceptOrder`/`cancelOrder`/`completeOrder` sempre conferem o dono
    da reserva no repositório, nunca confiam em decisão tomada só na tela.
 
 
@@ -101,13 +101,12 @@ Ver `[README.md](../README.md)` na raiz do projeto.
 ## 7. Extensões implementadas desde a primeira entrega
 
 - Escaneamento de QR Code: implementado (mobile, `expo-camera` com `barcodeScannerSettings`),
-  junto com um domínio "Pedido" mockado localmente (`src/data/ordersRepository.ts` em cada
-  plataforma) para dar ao QR Code algo de verdade para identificar. Ver
-  `docs/superpowers/specs/2026-10-05-pedidos-qrcode-design.md` para o desenho completo (fora do
-  git, uso interno).
+junto com um domínio "Pedido" mockado localmente (`src/data/ordersRepository.ts` em cada
+plataforma) para dar ao QR Code algo de verdade para identificar. Ver
+`docs/superpowers/specs/2026-10-05-pedidos-qrcode-design.md` para o desenho completo (fora do
+git, uso interno).
 - Proxy de cookie em produção na Web: implementado via `web/server/authProxy.ts` compartilhado
-  entre o plugin de desenvolvimento do Vite e um servidor Express de produção.
+entre o plugin de desenvolvimento do Vite e um servidor Express de produção.
 
 Continua fora de escopo, pela mesma razão já registrada: persistência de sessão entre reinícios
 do app Mobile (dependeria de uma lib nativa de cookie fora do Expo Go).
-

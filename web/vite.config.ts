@@ -1,6 +1,8 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig, type Plugin } from 'vite'
 import { forwardToAuthApi } from './server/authProxy.js'
+import { handleDeliveryPhotoUpload, uploadsDir } from './server/photoStorage.js'
+import { serveUploads } from './server/uploadsStatic.js'
 
 // Substitui o proxy padrão do Vite (http-proxy-middleware) por um
 // middleware próprio que reusa a mesma função de produção
@@ -12,6 +14,8 @@ function authProxyPlugin(): Plugin {
     configureServer(server) {
       // server.middlewares é uma instância do connect: montar em '/api'
       // já remove esse prefixo de req.url dentro do handler.
+      server.middlewares.use('/uploads', serveUploads(uploadsDir));
+
       server.middlewares.use('/api', async (req, res) => {
         const chunks: Buffer[] = [];
         for await (const chunk of req) chunks.push(chunk as Buffer);
@@ -32,7 +36,10 @@ function authProxyPlugin(): Plugin {
           body: hasBody ? body : undefined,
         });
 
-        const response = await forwardToAuthApi(request, req.url ?? '/');
+        const response =
+          req.url === '/delivery-photos'
+            ? await handleDeliveryPhotoUpload(request)
+            : await forwardToAuthApi(request, req.url ?? '/');
 
         res.statusCode = response.status;
         response.headers.forEach((value, key) => res.setHeader(key, value));

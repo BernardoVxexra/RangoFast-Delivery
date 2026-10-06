@@ -64,7 +64,18 @@ export function OrderDetailScreen() {
               <p className="muted-text">Em entrega por {order.assignedTo?.username}.</p>
             )}
 
-            {order.status === 'delivered' && <p className="muted-text">Entrega concluída.</p>}
+            {order.status === 'delivered' && (
+              <>
+                <p className="muted-text">Entrega concluída.</p>
+                {order.deliveryPhotoUri && (
+                  <img
+                    src={order.deliveryPhotoUri}
+                    alt="Comprovante de entrega"
+                    className="camera-preview"
+                  />
+                )}
+              </>
+            )}
           </>
         )}
 

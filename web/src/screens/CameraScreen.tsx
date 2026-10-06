@@ -17,7 +17,7 @@ export function CameraScreen() {
   const [deliveryConfirmed, setDeliveryConfirmed] = useState(false);
 
   async function handleConfirmDelivery() {
-    const result = await complete();
+    const result = await complete(photoUri);
     setDeliveryConfirmed(result.ok);
     setFeedback(result.message);
   }

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import type { AuthUser } from '../api/auth';
+import { uploadDeliveryPhoto } from '../api/photos';
 import type { Order } from '../data/ordersRepository';
 import {
   OrderError,
@@ -65,9 +66,20 @@ export function useOrder(code: string | undefined, user: AuthUser | null) {
     return runAction(() => cancelOrder(code, user.username), 'Entrega cancelada.');
   };
 
-  const complete = () => {
+  const complete = (photoUri: string | null = null) => {
     if (!user || !code) return Promise.resolve({ ok: false, message: 'Faça login novamente.' });
-    return runAction(() => completeOrder(code, user.username), 'Entrega concluída com sucesso!');
+    return runAction(async () => {
+      // A foto nasce como data URI (base64) na câmera; sobe para o
+      // servidor salvar em disco e trocamos pela URL permanente antes de
+      // gravar o pedido, para não inchar o localStorage com base64. Se o
+      // upload falhar, mantém a data URI como fallback — a entrega não
+      // deve travar por isso.
+      let deliveryPhotoUri = photoUri;
+      if (photoUri?.startsWith('data:')) {
+        deliveryPhotoUri = await uploadDeliveryPhoto(code, photoUri).catch(() => photoUri);
+      }
+      return completeOrder(code, user.username, deliveryPhotoUri);
+    }, 'Entrega concluída com sucesso!');
   };
 
   const isMine = !!user && !!order && order.assignedTo?.username === user.username;

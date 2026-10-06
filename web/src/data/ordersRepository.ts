@@ -12,6 +12,7 @@ export interface Order {
   status: OrderStatus;
   assignedTo: { username: string } | null;
   deliveredAt: string | null;
+  deliveryPhotoUri: string | null;
 }
 
 const STORAGE_KEY = '@RangoFast:orders';
@@ -99,7 +100,11 @@ export async function cancelOrder(code: string, username: string): Promise<Order
   return order;
 }
 
-export async function completeOrder(code: string, username: string): Promise<Order> {
+export async function completeOrder(
+  code: string,
+  username: string,
+  deliveryPhotoUri: string | null = null
+): Promise<Order> {
   const orders = loadOrders();
   const order = findOrFail(orders, code);
 
@@ -109,6 +114,7 @@ export async function completeOrder(code: string, username: string): Promise<Ord
 
   order.status = 'delivered';
   order.deliveredAt = new Date().toISOString();
+  order.deliveryPhotoUri = deliveryPhotoUri;
   saveOrders(orders);
   return order;
 }
