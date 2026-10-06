@@ -39,13 +39,39 @@ export function OrderDetailScreen() {
           <Text style={styles.errorText}>{error ?? 'Pedido não encontrado.'}</Text>
         ) : (
           <>
-            <Text style={styles.code}>{order.code}</Text>
-            <View style={styles.infoCard}>
-              <Info label="Restaurante" value={order.restaurantName} />
-              <Info label="Cliente" value={order.customerName} />
-              <Info label="Endereço" value={order.customerAddress} />
-              <Info label="Itens" value={order.items} />
-              <Info label="Valor" value={formatCurrency(order.value)} />
+            <View style={styles.waybill}>
+              <Text style={styles.waybillCode}>{order.code}</Text>
+
+              <RouteDivider />
+
+              <View style={styles.waybillBlock}>
+                <Text style={styles.waybillRestaurant}>{order.restaurantName}</Text>
+                <Text style={styles.waybillCustomer}>{order.customerName}</Text>
+                <Text style={styles.waybillAddress}>{order.customerAddress}</Text>
+              </View>
+
+              <View style={styles.waybillItems}>
+                {order.items.split(', ').map((item) => (
+                  <View key={item} style={styles.waybillItemRow}>
+                    <Text style={styles.waybillItemMark}>{'>'}</Text>
+                    <Text style={styles.waybillItemText}>{item}</Text>
+                  </View>
+                ))}
+              </View>
+
+              {order.status === 'delivered' && order.deliveryPhotoUri && (
+                <>
+                  <RouteDivider />
+                  <View style={styles.waybillProof}>
+                    <Text style={styles.waybillProofLabel}>Comprovante</Text>
+                    <Image source={{ uri: order.deliveryPhotoUri }} style={styles.proofPhoto} />
+                  </View>
+                </>
+              )}
+
+              <RouteDivider />
+
+              <Text style={styles.waybillValue}>{formatCurrency(order.value)}</Text>
             </View>
 
             {order.status === 'available' && (
@@ -67,12 +93,7 @@ export function OrderDetailScreen() {
             )}
 
             {order.status === 'delivered' && (
-              <>
-                <Text style={styles.mutedText}>Entrega concluída.</Text>
-                {order.deliveryPhotoUri && (
-                  <Image source={{ uri: order.deliveryPhotoUri }} style={styles.proofPhoto} />
-                )}
-              </>
+              <Text style={styles.mutedText}>Entrega concluída.</Text>
             )}
           </>
         )}
@@ -86,35 +107,47 @@ export function OrderDetailScreen() {
   );
 }
 
-function Info({ label, value }: { label: string; value: string }) {
-  return (
-    <View style={styles.infoRow}>
-      <Text style={styles.infoLabel}>{label}</Text>
-      <Text style={styles.infoValue}>{value}</Text>
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: colors.paper },
   body: { paddingHorizontal: 24, paddingVertical: 28, gap: 12 },
-  code: { fontFamily: font.black, fontSize: 28, color: colors.ink, letterSpacing: 0.5 },
-  infoCard: {
-    borderWidth: 1,
-    borderColor: colors.hairline,
-    borderRadius: radius.md,
-    backgroundColor: colors.paperRaised,
-    padding: 16,
-    gap: 10,
-  },
-  infoRow: { gap: 2 },
-  infoLabel: { fontFamily: font.bold, fontSize: 12, color: colors.muted },
-  infoValue: { fontFamily: font.regular, fontSize: 15, color: colors.ink },
   mutedText: { fontFamily: font.regular, fontSize: 14, color: colors.muted },
   errorText: { fontFamily: font.regular, fontSize: 14, color: colors.alertRed },
+  // Talão de entrega: o pedido tratado como documento de despacho — código
+  // grande como número de rastreio, linhas tracejadas de "rasgo" entre
+  // seções, não um card de formulário genérico.
+  waybill: {
+    borderWidth: 1,
+    borderColor: colors.hairline,
+    borderRadius: radius.md + 2,
+    backgroundColor: colors.paperRaised,
+    padding: 20,
+    gap: 14,
+  },
+  waybillCode: {
+    fontFamily: font.black,
+    fontSize: 30,
+    color: colors.ink,
+    letterSpacing: 0.3,
+  },
+  waybillBlock: { gap: 2 },
+  waybillRestaurant: { fontFamily: font.bold, fontSize: 18, color: colors.ink },
+  waybillCustomer: { fontFamily: font.regular, fontSize: 15, color: colors.ink },
+  waybillAddress: { fontFamily: font.regular, fontSize: 14, color: colors.muted },
+  waybillItems: { gap: 4 },
+  waybillItemRow: { flexDirection: 'row', gap: 8 },
+  waybillItemMark: { fontFamily: font.black, fontSize: 15, color: colors.routeAmber },
+  waybillItemText: { fontFamily: font.regular, fontSize: 15, color: colors.ink, flexShrink: 1 },
+  waybillProof: { gap: 8 },
+  waybillProofLabel: { fontFamily: font.bold, fontSize: 13, color: colors.muted },
+  waybillValue: {
+    fontFamily: font.black,
+    fontSize: 24,
+    color: colors.ink,
+    alignSelf: 'flex-end',
+  },
   proofPhoto: {
     width: '100%',
-    aspectRatio: 3 / 4,
+    aspectRatio: 4 / 3,
     borderRadius: radius.md,
   },
 });

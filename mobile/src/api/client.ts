@@ -3,15 +3,13 @@ import axios from 'axios';
 const BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL ?? '';
 
 // cookie de sessão é armazenado e reenviado automaticamente
-// pela camada nativa de rede (OkHttp no Android, NSURLSession no iOS) durante
-// o tempo de vida do app — não existe "withCredentials" equivalente aqui
-// porque esse conceito é específico do modelo de segurança de navegadores.
+// pela camada nativa de rede (OkHttp no Android, NSURLSession no iOS) 
 export const apiClient = axios.create({
   baseURL: BASE_URL,
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Erros nunca chegam à UI com o payload bruto do servidor.
+// Erros nunca chegam à Ui com o payload bruto do servidor.
 apiClient.interceptors.response.use(
   (response) => response,
   (error) => {

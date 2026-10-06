@@ -5,7 +5,7 @@ import { Directory, File, Paths } from 'expo-file-system';
 // O cache do expo-camera é temporário e pode ser limpo pelo sistema a
 // qualquer momento; copiamos o comprovante para uma pasta própria e
 // duradoura dentro do armazenamento do app.
-async function persistPhoto(sourceUri: string): Promise<string> {
+export async function persistPhoto(sourceUri: string): Promise<string> {
   const deliveryPhotosDir = new Directory(Paths.document, 'delivery-photos');
   deliveryPhotosDir.create({ idempotent: true });
   const destFile = new File(deliveryPhotosDir, `${Date.now()}.jpg`);

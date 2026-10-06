@@ -48,11 +48,17 @@ export function HistoryScreen() {
                 {item.deliveryPhotoUri && (
                   <Image source={{ uri: item.deliveryPhotoUri }} style={styles.thumbnail} />
                 )}
-                <Text style={styles.code}>{item.code}</Text>
-                <Text style={styles.restaurant}>{item.restaurantName}</Text>
-                <Text style={styles.mutedText}>
-                  {formatCurrency(item.value)} · {formatDateTime(item.deliveredAt!)}
-                </Text>
+                <View style={styles.cardHeading}>
+                  <View style={styles.tag}>
+                    <Text style={styles.tagText}>{item.code}</Text>
+                  </View>
+                  <Text style={styles.restaurant}>{item.restaurantName}</Text>
+                </View>
+                <RouteDivider />
+                <View style={styles.cardFooter}>
+                  <Text style={styles.value}>{formatCurrency(item.value)}</Text>
+                  <Text style={styles.mutedText}>{formatDateTime(item.deliveredAt!)}</Text>
+                </View>
               </View>
             )}
           />
@@ -76,8 +82,17 @@ const styles = StyleSheet.create({
     padding: 14,
     gap: 4,
   },
-  code: { fontFamily: font.bold, fontSize: 16, color: colors.ink },
-  restaurant: { fontFamily: font.regular, fontSize: 14, color: colors.ink },
+  cardHeading: { flexDirection: 'row', alignItems: 'center', gap: 8 },
+  tag: {
+    paddingVertical: 2,
+    paddingHorizontal: 8,
+    borderRadius: 4,
+    backgroundColor: 'rgba(229, 148, 33, 0.16)',
+  },
+  tagText: { fontFamily: font.bold, fontSize: 12, color: colors.routeAmber },
+  restaurant: { fontFamily: font.bold, fontSize: 15, color: colors.ink, flexShrink: 1 },
+  cardFooter: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'baseline' },
+  value: { fontFamily: font.bold, fontSize: 15, color: colors.ink },
   mutedText: { fontFamily: font.regular, fontSize: 13, color: colors.muted },
   thumbnail: {
     width: '100%',

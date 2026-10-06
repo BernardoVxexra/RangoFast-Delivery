@@ -48,10 +48,15 @@ export function HistoryScreen() {
                   className="order-card__thumbnail"
                 />
               )}
-              <p className="order-card__value">{order.code} · {order.restaurantName}</p>
-              <p className="muted-text">
-                {formatCurrency(order.value)} · {formatDateTime(order.deliveredAt!)}
-              </p>
+              <div className="order-card__heading">
+                <span className="order-card__tag">{order.code}</span>
+                <span className="order-card__value">{order.restaurantName}</span>
+              </div>
+              <hr className="waybill__tear" />
+              <div className="order-card__footer">
+                <span className="order-card__value">{formatCurrency(order.value)}</span>
+                <span className="muted-text">{formatDateTime(order.deliveredAt!)}</span>
+              </div>
             </div>
           ))
         )}

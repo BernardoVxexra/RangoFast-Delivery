@@ -37,13 +37,43 @@ export function OrderDetailScreen() {
           <p className="error-text">{error ?? 'Pedido não encontrado.'}</p>
         ) : (
           <>
-            <h2 className="screen__title">{order.code}</h2>
-            <div className="order-card">
-              <Info label="Restaurante" value={order.restaurantName} />
-              <Info label="Cliente" value={order.customerName} />
-              <Info label="Endereço" value={order.customerAddress} />
-              <Info label="Itens" value={order.items} />
-              <Info label="Valor" value={formatCurrency(order.value)} />
+            <div className="waybill">
+              <p className="waybill__code">{order.code}</p>
+
+              <hr className="waybill__tear" />
+
+              <div className="waybill__block">
+                <p className="waybill__restaurant">{order.restaurantName}</p>
+                <p className="waybill__customer">{order.customerName}</p>
+                <p className="waybill__address">{order.customerAddress}</p>
+              </div>
+
+              <ul className="waybill__items">
+                {order.items.split(', ').map((item) => (
+                  <li key={item} className="waybill__item">
+                    <span className="waybill__item-mark">&gt;</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+
+              {order.status === 'delivered' && order.deliveryPhotoUri && (
+                <>
+                  <hr className="waybill__tear" />
+                  <div className="waybill__proof">
+                    <p className="waybill__proof-label">Comprovante</p>
+                    <img
+                      src={order.deliveryPhotoUri}
+                      alt="Comprovante de entrega"
+                      className="waybill__proof-photo"
+                    />
+                  </div>
+                </>
+              )}
+
+              <hr className="waybill__tear" />
+
+              <p className="waybill__value">{formatCurrency(order.value)}</p>
             </div>
 
             {order.status === 'available' && (
@@ -64,18 +94,7 @@ export function OrderDetailScreen() {
               <p className="muted-text">Em entrega por {order.assignedTo?.username}.</p>
             )}
 
-            {order.status === 'delivered' && (
-              <>
-                <p className="muted-text">Entrega concluída.</p>
-                {order.deliveryPhotoUri && (
-                  <img
-                    src={order.deliveryPhotoUri}
-                    alt="Comprovante de entrega"
-                    className="camera-preview"
-                  />
-                )}
-              </>
-            )}
+            {order.status === 'delivered' && <p className="muted-text">Entrega concluída.</p>}
           </>
         )}
 
@@ -84,15 +103,6 @@ export function OrderDetailScreen() {
 
         <FeedbackModal visible={feedback !== null} message={feedback ?? ''} onClose={() => setFeedback(null)} />
       </div>
-    </div>
-  );
-}
-
-function Info({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="order-card__row">
-      <span className="order-card__label">{label}</span>
-      <span className="order-card__value">{value}</span>
     </div>
   );
 }

@@ -30,8 +30,16 @@ export function LoginScreen() {
         <p className="app-header__subtitle">Acesso do entregador</p>
       </header>
 
-      <div className="screen__body screen__body--center">
-        <Input label="Usuário" value={username} onChange={(e) => setUsername(e.target.value)} />
+      <div className="screen__body">
+        <div className="hero">
+          <h1 className="hero__title">Aceite. Entregue. Comprove.</h1>
+          <p className="hero__subtitle">
+            Do pedido disponível até a foto de confirmação — sua rota inteira em um só lugar.
+          </p>
+        </div>
+
+        <div className="login-form">
+          <Input label="Usuário" value={username} onChange={(e) => setUsername(e.target.value)} />
         <Input
           label="Senha"
           type="password"
@@ -39,13 +47,14 @@ export function LoginScreen() {
           onChange={(e) => setPassword(e.target.value)}
         />
 
-        <Button label="Entrar" onClick={handleLogin} loading={isLoading} />
+          <Button label="Entrar" onClick={handleLogin} loading={isLoading} />
 
-        <hr className="route-divider" />
+          <hr className="route-divider" />
 
-        <Link className="link" to="/register">
-          Criar conta
-        </Link>
+          <Link className="link" to="/register">
+            Criar conta
+          </Link>
+        </div>
 
         <FeedbackModal
           visible={feedback !== null}
