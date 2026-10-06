@@ -37,7 +37,7 @@ export function LoginScreen() {
         <View style={styles.hero}>
           <Text style={styles.heroTitle}>Aceite. Entregue. Comprove.</Text>
           <Text style={styles.heroSubtitle}>
-            Do pedido disponível até a foto de confirmação — sua rota inteira em um só lugar.
+            Do pedido disponível até a foto de confirmação sua rota inteira em um só lugar.
           </Text>
         </View>
 
